@@ -1,4 +1,3 @@
-#include <iostream>
 #include <vector>
 #include <queue>
 #include <utility>
@@ -6,23 +5,35 @@
 
 using namespace std;
 
-int main()
-{
-    class Solution
-    {
-    public:
-        int maxDistance(vector<vector<int>> &grid)
-        {
-
+class Solution {
+public:
+    int maxDistance(vector<vector<int>>& grid) {
+        int n = grid.size();
+        queue<pair<int, int>> q;
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (grid[i][j] == 1) {
+                    q.push({i, j});
+                }
+            }
         }
-    };
-
-    vector<vector<int>> grid1 = {{1, 0, 1}, {0, 0, 0}, {1, 0, 1}};
-    vector<vector<int>> grid2={{1,0,0},{0,0,0},{0,0,0}};
-    Solution solution;
-    int test1 = solution.maxDistance(grid1);
-    int test2 = solution.maxDistance(grid2);
-    cout << "test1:" << test1 << endl;
-    cout << "test2:" << test2 << endl;
-    return 0;
-}
+        int dx[4] = {-1, 1, 0, 0};
+        int dy[4] = {0, 0, -1, 1};
+        int dist = -1;
+        while (!q.empty()) {
+            int x = q.front().first;
+            int y = q.front().second;
+            q.pop();
+            for (int i = 0; i < 4; ++i) {
+                int a = x + dx[i];
+                int b = y + dy[i];
+                if (a >= 0 && a < n && b >= 0 && b < n && grid[a][b] == 0) {
+                    grid[a][b] = grid[x][y] + 1;
+                    q.push({a, b});
+                    dist = max(dist, grid[a][b] - 1);
+                }
+            }
+        }
+        return dist;
+    }
+};
